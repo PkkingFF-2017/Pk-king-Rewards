@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PK King FF Rewards</title>
+    <style>
+        :root {
+            --bg-dark: #0a0e17;
+            --card-bg: #161f30;
+            --accent-blue: #00d2ff;
+            --accent-red: #ff2a5f;
+            --text-main: #ffffff;
+            --text-muted: #a0aec0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg-dark);
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 15px;
+            background: var(--card-bg);
+            border-bottom: 2px solid var(--accent-blue);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,210,255,0.2);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .balance-card {
+            text-align: center;
+            border: 1px solid var(--accent-blue);
+            background: linear-gradient(180deg, var(--card-bg) 0%, rgba(0,210,255,0.1) 100%);
+        }
+
+        .balance-amount {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            margin: 10px 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+
+        .btn-blue {
+            background: var(--accent-blue);
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+        }
+
+        .btn-red {
+            background: var(--accent-red);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 42, 95, 0.4);
+        }
+
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid var(--accent-blue);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        nav button.active {
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid var(--text-muted);
+            background: #000;
+            color: #fff;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <h1>PK KING FF REWARDS</h1>
+    </header>
+
+    <!-- 1. LOGIN SCREEN -->
+    <div id="screen-login" class="screen active">
+        <div class="card" style="text-align: center; margin-top: 50px;">
+            <h2>Welcome Gamers!</h2>
+            <p style="color: var(--text-muted);">Sign in with Google to claim your free rewards.</p>
+            <button class="btn btn-blue" onclick="googleLogin()">Sign In with Google</button>
+        </div>
+    </div>
+
+    <!-- 2. HOME SCREEN -->
+    <div id="screen-home" class="screen">
+        <div class="card balance-card">
+            <div>Your Coin Balance</div>
+            <div class="balance-amount" id="user-coins">30,000</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Starter Bonus Included</div>
+        </div>
+
+        <div class="card">
+            <h3>Quick Actions</h3>
+            <button class="btn btn-blue" onclick="showScreen('earn')">Complete Tasks (+10 Coins)</button>
+            <button class="btn btn-red" onclick="showScreen('redeem')">Redeem Rewards</button>
+        </div>
+    </div>
+
+    <!-- 3. EARN SCREEN -->
+    <div id="screen-earn" class="screen">
+        <h3>Available Tasks</h3>
+        <div class="card">
+            <h4>Daily Check-in</h4>
+            <p style="color: var(--text-muted);">Claim 10 coins every hour.</p>
+            <button class="btn btn-blue" onclick="claimTaskReward(10)">Claim 10 Coins</button>
+        </div>
+    </div>
+
+    <!-- 4. REDEEM SCREEN -->
+    <div id="screen-redeem" class="screen">
+        <h3>Redeem Store</h3>
+        <div class="card">
+            <h4>₹10 Google Play / FF Redeem Code</h4>
+            <p>Cost: 30,000 Coins</p>
+            <input type="text" id="freefire-uid" placeholder="Enter Free Fire UID">
+            <button class="btn btn-red" onclick="submitRedeem(30000, '₹10 Redeem Code')">Request Redeem</button>
+        </div>
+    </div>
+
+    <!-- 5. REDEEM HISTORY -->
+    <div id="screen-history" class="screen">
+        <h3>Request History</h3>
+        <div id="history-list" class="card">
+            <p style="color: var(--text-muted);">No requests yet.</p>
+        </div>
+    </div>
+
+    <!-- 6. ADMIN DASHBOARD -->
+    <div id="screen-admin" class="screen">
+        <h3 style="color: var(--accent-red);">Admin Control Panel</h3>
+        <div class="card">
+            <h4>Pending Requests</h4>
+            <div id="admin-requests-list">
+                <p style="color: var(--text-muted);">No pending requests.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <nav id="app-nav" style="display: none;">
+        <button onclick="showScreen('home')" class="active">Home</button>
+        <button onclick="showScreen('earn')">Earn</button>
+        <button onclick="showScreen('redeem')">Redeem</button>
+        <button onclick="showScreen('history')">History</button>
+        <button onclick="showScreen('admin')" id="admin-tab" style="display:none; color: var(--accent-red);">Admin</button>
+    </nav>
+</div>
+
+<script>
+    let currentUser = null;
+    let coins = 30000;
+    let isAdmin = false;
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-' + screenId).classList.add('active');
+    }
+
+    function googleLogin() {
+        currentUser = { uid: "user_123", name: "PK King Gamer", email: "pkking@gmail.com" };
+        document.getElementById('app-nav').style.display = 'flex';
+        showScreen('home');
+        if(isAdmin) {
+            document.getElementById('admin-tab').style.display = 'block';
+        }
+    }
+
+    function claimTaskReward(amount) {
+        coins += amount;
+        document.getElementById('user-coins').innerText = coins.toLocaleString();
+        alert(`Success! ${amount} Coins added to your account.`);
+    }
+
+    function submitRedeem(cost, item) {
+        let uid = document.getElementById('freefire-uid').value;
+        if (!uid) {
+            alert("Please enter your Free Fire UID!");
+            return;
+        }
+        if (coins < cost) {
+            alert("Not enough coins!");
+            return;
+        }
+
+        coins -= cost;
+        document.getElementById('user-coins').innerText = coins.toLocaleString();
+        
+        let history = document.getElementById('history-list');
+        history.innerHTML = `
+            <div>
+                <strong>${item}</strong><br>
+                <small>UID: ${uid} | Status: <span style="color: orange;">Pending</span></small>
+            </div>
+        ` + history.innerHTML;
+
+        alert("Redeem Request Submitted Successfully!");
+        showScreen('history');
+    }
+</script>
+
+</body>
+</html>
